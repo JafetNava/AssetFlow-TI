@@ -1,0 +1,287 @@
+{% extends "base.html" %}
+
+{% block title %}
+{% if mode == "create" %}
+New Employee | AssetFlow TI
+{% else %}
+Edit Employee | AssetFlow TI
+{% endif %}
+{% endblock %}
+
+{% block content %}
+
+<header class="page-header">
+
+    <div>
+
+        <a
+            href="/employees"
+            class="back-link"
+        >
+            ← Back to Employees
+        </a>
+
+        <h2>
+            {% if mode == "create" %}
+                New Employee
+            {% else %}
+                Edit Employee
+            {% endif %}
+        </h2>
+
+        <p>
+            Employee information
+        </p>
+
+    </div>
+
+</header>
+
+
+{% if error %}
+
+<div class="alert-error">
+    {{ error }}
+</div>
+
+{% endif %}
+
+
+<form
+    method="POST"
+    class="equipment-form"
+>
+
+    <section class="form-section">
+
+        <h3>
+            Employee Information
+        </h3>
+
+        <div class="form-grid">
+
+            <div class="form-group">
+
+                <label for="employee_name">
+                    Employee Name *
+                </label>
+
+                <input
+                    type="text"
+                    id="employee_name"
+                    name="employee_name"
+                    required
+                    value="{{ request.form.get(
+                        'employee_name',
+                        employee.EmployeeName if employee else ''
+                    ) }}"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="position">
+                    Position
+                </label>
+
+                <input
+                    type="text"
+                    id="position"
+                    name="position"
+                    value="{{ request.form.get(
+                        'position',
+                        employee.Position if employee else ''
+                    ) }}"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="area">
+                    Area
+                </label>
+
+                <input
+                    type="text"
+                    id="area"
+                    name="area"
+                    value="{{ request.form.get(
+                        'area',
+                        employee.Area if employee else ''
+                    ) }}"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="business_line">
+                    Business Line
+                </label>
+
+                <input
+                    type="text"
+                    id="business_line"
+                    name="business_line"
+                    value="{{ request.form.get(
+                        'business_line',
+                        employee.BusinessLine if employee else ''
+                    ) }}"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="site">
+                    Site
+                </label>
+
+                <input
+                    type="text"
+                    id="site"
+                    name="site"
+                    value="{{ request.form.get(
+                        'site',
+                        employee.Site if employee else ''
+                    ) }}"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="city">
+                    City
+                </label>
+
+                <input
+                    type="text"
+                    id="city"
+                    name="city"
+                    value="{{ request.form.get(
+                        'city',
+                        employee.City if employee else ''
+                    ) }}"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="office">
+                    Office
+                </label>
+
+                <input
+                    type="text"
+                    id="office"
+                    name="office"
+                    value="{{ request.form.get(
+                        'office',
+                        employee.Office if employee else ''
+                    ) }}"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="direct_supervisor">
+                    Direct Supervisor
+                </label>
+
+                <input
+                    type="text"
+                    id="direct_supervisor"
+                    name="direct_supervisor"
+                    value="{{ request.form.get(
+                        'direct_supervisor',
+                        employee.DirectSupervisor if employee else ''
+                    ) }}"
+                >
+
+            </div>
+
+
+            {% if mode == "edit" %}
+
+            {% set current_active = request.form.get(
+                'active',
+                employee.Active|string
+            ) %}
+
+            <div class="form-group">
+
+                <label for="active">
+                    Status
+                </label>
+
+                <select
+                    id="active"
+                    name="active"
+                >
+
+                    <option
+                        value="1"
+                        {% if current_active == "1" %}
+                            selected
+                        {% endif %}
+                    >
+                        Active
+                    </option>
+
+                    <option
+                        value="0"
+                        {% if current_active == "0" %}
+                            selected
+                        {% endif %}
+                    >
+                        Inactive
+                    </option>
+
+                </select>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </section>
+
+
+    <div class="form-actions">
+
+        <a
+            href="/employees"
+            class="secondary-button"
+        >
+            Cancel
+        </a>
+
+        <button
+            type="submit"
+            class="primary-button"
+        >
+            {% if mode == "create" %}
+                Save Employee
+            {% else %}
+                Save Changes
+            {% endif %}
+        </button>
+
+    </div>
+
+</form>
+
+{% endblock %}

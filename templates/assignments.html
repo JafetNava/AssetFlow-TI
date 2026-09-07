@@ -1,0 +1,313 @@
+{% extends "base.html" %}
+
+{% block title %}
+Assignments | AssetFlow TI
+{% endblock %}
+
+{% block content %}
+
+<header class="page-header">
+
+    <div>
+        <h2>Assignments</h2>
+
+        <p>
+            Equipment assignment and return control
+        </p>
+    </div>
+
+    <div class="header-actions">
+
+        <span class="system-status">
+            {{ assignments|length }} records
+        </span>
+
+        <a
+            href="/assignments/new"
+            class="primary-button"
+        >
+            + New Assignment
+        </a>
+
+    </div>
+
+</header>
+
+
+<section class="panel filter-panel">
+
+    <form
+        method="GET"
+        action="/assignments"
+        class="employee-filters"
+    >
+
+        <div class="filter-group">
+
+            <label for="search">
+                Search
+            </label>
+
+            <input
+                type="text"
+                id="search"
+                name="search"
+                value="{{ search }}"
+                placeholder="Equipment, employee, serial..."
+            >
+
+        </div>
+
+
+        <div class="filter-group">
+
+            <label for="status">
+                Status
+            </label>
+
+            <select
+                id="status"
+                name="status"
+            >
+
+                <option value="">
+                    All
+                </option>
+
+                <option
+                    value="Active"
+                    {% if selected_status == "Active" %}
+                        selected
+                    {% endif %}
+                >
+                    Active
+                </option>
+
+                <option
+                    value="Finalized"
+                    {% if selected_status == "Finalized" %}
+                        selected
+                    {% endif %}
+                >
+                    Finalized
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="filter-actions">
+
+            <button
+                type="submit"
+                class="primary-button"
+            >
+                Filter
+            </button>
+
+            <a
+                href="/assignments"
+                class="secondary-button"
+            >
+                Clear
+            </a>
+
+        </div>
+
+    </form>
+
+</section>
+
+
+<section class="panel">
+
+    <div class="panel-header">
+
+        <div>
+
+            <h3>
+                Assignment History
+            </h3>
+
+            <p>
+                Current and previous equipment assignments
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Equipment</th>
+                    <th>Employee</th>
+                    <th>Area</th>
+                    <th>Office</th>
+                    <th>Assigned</th>
+                    <th>Returned</th>
+                    <th>Status</th>
+
+                    <th class="actions-header">
+                        Actions
+                    </th>
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+            {% for assignment in assignments %}
+
+                <tr>
+
+                    <td>
+
+                        <strong>
+                            {{ assignment.Code }}
+                        </strong>
+
+                        <div class="table-subtext">
+                            {{ assignment.Brand }}
+                            {{ assignment.Model }}
+                        </div>
+
+                    </td>
+
+
+                    <td>
+
+                        {{ assignment.EmployeeName }}
+
+                        <div class="table-subtext">
+                            {{ assignment.Position or "-" }}
+                        </div>
+
+                    </td>
+
+
+                    <td>
+                        {{ assignment.Area or "-" }}
+                    </td>
+
+
+                    <td>
+                        {{ assignment.Office or "-" }}
+                    </td>
+
+
+                    <td>
+                        {{ assignment.AssignmentDate }}
+                    </td>
+
+
+                    <td>
+                        {{ assignment.ReturnDate or "-" }}
+                    </td>
+
+
+                    <td>
+
+                        {% if assignment.Status == "Active" %}
+
+                            <span
+                                class="employee-status status-active"
+                            >
+                                Active
+                            </span>
+
+                        {% else %}
+
+                            <span
+                                class="employee-status status-inactive"
+                            >
+                                Finalized
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <td class="actions-cell">
+
+                        {% if assignment.Status == "Active" %}
+
+                            <div class="assignment-actions">
+
+                                <a
+                                    href="/responsibility-forms/new?assignment_id={{ assignment.AssignmentID }}"
+                                    class="view-button"
+                                >
+                                    Form
+                                </a>
+
+
+                                <a
+                                    href="/assignments/{{ assignment.AssignmentID }}/reassign"
+                                    class="view-button"
+                                >
+                                    Reassign
+                                </a>
+
+
+                                <form
+                                    method="POST"
+                                    action="/assignments/{{ assignment.AssignmentID }}/return"
+                                    onsubmit="return confirm('Return this equipment?');"
+                                >
+
+                                    <button
+                                        type="submit"
+                                        class="return-button"
+                                    >
+                                        Return
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        {% else %}
+
+                            <span class="table-subtext">
+                                Completed
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+            {% else %}
+
+                <tr>
+
+                    <td
+                        colspan="8"
+                        class="empty-row"
+                    >
+                        No assignments found.
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+{% endblock %}

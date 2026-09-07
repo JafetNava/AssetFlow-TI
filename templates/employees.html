@@ -1,0 +1,276 @@
+{% extends "base.html" %}
+
+{% block title %}
+Employees | AssetFlow TI
+{% endblock %}
+
+{% block content %}
+
+<header class="page-header">
+
+    <div>
+
+        <h2>
+            Employees
+        </h2>
+
+        <p>
+            Employee and assigned equipment management
+        </p>
+
+    </div>
+
+
+    <div class="header-actions">
+
+        <span class="system-status">
+            {{ employees|length }} records
+        </span>
+
+        <a
+            href="/employees/new"
+            class="primary-button"
+        >
+            + New Employee
+        </a>
+
+    </div>
+
+</header>
+
+
+<section class="panel filter-panel">
+
+    <form
+        method="GET"
+        action="/employees"
+        class="employee-filters"
+    >
+
+        <div class="filter-group">
+
+            <label for="search">
+                Search
+            </label>
+
+            <input
+                type="text"
+                id="search"
+                name="search"
+                value="{{ search }}"
+                placeholder="Name, position, area, city..."
+            >
+
+        </div>
+
+
+        <div class="filter-group">
+
+            <label for="status">
+                Status
+            </label>
+
+            <select
+                id="status"
+                name="status"
+            >
+
+                <option value="">
+                    All
+                </option>
+
+                <option
+                    value="active"
+                    {% if selected_status == "active" %}
+                        selected
+                    {% endif %}
+                >
+                    Active
+                </option>
+
+                <option
+                    value="inactive"
+                    {% if selected_status == "inactive" %}
+                        selected
+                    {% endif %}
+                >
+                    Inactive
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="filter-actions">
+
+            <button
+                type="submit"
+                class="primary-button"
+            >
+                Filter
+            </button>
+
+            <a
+                href="/employees"
+                class="secondary-button"
+            >
+                Clear
+            </a>
+
+        </div>
+
+    </form>
+
+</section>
+
+
+<section class="panel">
+
+    <div class="panel-header">
+
+        <div>
+
+            <h3>
+                Employees
+            </h3>
+
+            <p>
+                Registered personnel
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Name</th>
+                    <th>Position</th>
+                    <th>Area</th>
+                    <th>City</th>
+                    <th>Office</th>
+                    <th>Equipment</th>
+                    <th>Status</th>
+
+                    <th class="actions-header">
+                        Actions
+                    </th>
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+            {% for employee in employees %}
+
+                <tr>
+
+                    <td>
+
+                        <strong>
+                            {{ employee.EmployeeName }}
+                        </strong>
+
+                    </td>
+
+
+                    <td>
+                        {{ employee.Position or "-" }}
+                    </td>
+
+
+                    <td>
+                        {{ employee.Area or "-" }}
+                    </td>
+
+
+                    <td>
+                        {{ employee.City or "-" }}
+                    </td>
+
+
+                    <td>
+                        {{ employee.Office or "-" }}
+                    </td>
+
+
+                    <td>
+                        {{ employee.AssignedEquipment }}
+                    </td>
+
+
+                    <td>
+
+                        {% if employee.Active == 1 %}
+
+                            <span class="employee-status status-active">
+                                Active
+                            </span>
+
+                        {% else %}
+
+                            <span class="employee-status status-inactive">
+                                Inactive
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <td class="actions-cell">
+
+                        <div class="table-actions">
+
+                            <a
+                                href="/employees/{{ employee.EmployeeID }}/edit"
+                                class="edit-button"
+                            >
+                                Edit
+                            </a>
+
+                            <a
+                                href="/employees/{{ employee.EmployeeID }}"
+                                class="view-button"
+                            >
+                                View
+                            </a>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            {% else %}
+
+                <tr>
+
+                    <td
+                        colspan="8"
+                        class="empty-row"
+                    >
+                        No employees found.
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+{% endblock %}

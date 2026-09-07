@@ -1,0 +1,329 @@
+{% extends "base.html" %}
+
+{% block title %}
+Inventory | AssetFlow TI
+{% endblock %}
+
+{% block content %}
+
+<header class="page-header">
+
+    <div>
+
+        <h2>
+            Inventory
+        </h2>
+
+        <p>
+            Equipment management and tracking
+        </p>
+
+    </div>
+
+
+    <div class="header-actions">
+
+        <span class="system-status">
+            {{ computers|length }} records
+        </span>
+
+        <a
+            href="/inventory/new"
+            class="primary-button"
+        >
+            + New Equipment
+        </a>
+
+    </div>
+
+</header>
+
+
+<section class="panel filter-panel">
+
+    <form
+        class="filters"
+        method="GET"
+        action="/inventory"
+    >
+
+        <div class="filter-group search-group">
+
+            <label for="search">
+                Search
+            </label>
+
+            <input
+                type="text"
+                id="search"
+                name="search"
+                value="{{ search }}"
+                placeholder="Code, serial, model, asset..."
+            >
+
+        </div>
+
+
+        <div class="filter-group">
+
+            <label for="status">
+                Status
+            </label>
+
+            <select
+                id="status"
+                name="status"
+            >
+
+                <option value="">
+                    All
+                </option>
+
+                {% for item in statuses %}
+
+                <option
+                    value="{{ item.Status }}"
+                    {% if selected_status == item.Status %}
+                        selected
+                    {% endif %}
+                >
+                    {{ item.Status }}
+                </option>
+
+                {% endfor %}
+
+            </select>
+
+        </div>
+
+
+        <div class="filter-group">
+
+            <label for="type">
+                Type
+            </label>
+
+            <select
+                id="type"
+                name="type"
+            >
+
+                <option value="">
+                    All
+                </option>
+
+                {% for item in types %}
+
+                <option
+                    value="{{ item.Type }}"
+                    {% if selected_type == item.Type %}
+                        selected
+                    {% endif %}
+                >
+                    {{ item.Type }}
+                </option>
+
+                {% endfor %}
+
+            </select>
+
+        </div>
+
+
+        <div class="filter-group">
+
+            <label for="brand">
+                Brand
+            </label>
+
+            <select
+                id="brand"
+                name="brand"
+            >
+
+                <option value="">
+                    All
+                </option>
+
+                {% for item in brands %}
+
+                <option
+                    value="{{ item.Brand }}"
+                    {% if selected_brand == item.Brand %}
+                        selected
+                    {% endif %}
+                >
+                    {{ item.Brand }}
+                </option>
+
+                {% endfor %}
+
+            </select>
+
+        </div>
+
+
+        <div class="filter-actions">
+
+            <button
+                type="submit"
+                class="primary-button"
+            >
+                Filter
+            </button>
+
+            <a
+                href="/inventory"
+                class="secondary-button"
+            >
+                Clear
+            </a>
+
+        </div>
+
+    </form>
+
+</section>
+
+
+<section class="panel">
+
+    <div class="panel-header">
+
+        <div>
+
+            <h3>
+                Equipment
+            </h3>
+
+            <p>
+                Registered IT assets
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Code</th>
+                    <th>Type</th>
+                    <th>Brand</th>
+                    <th>Model</th>
+                    <th>Serial Number</th>
+                    <th>Fixed Asset</th>
+                    <th>Status</th>
+
+                    <th class="actions-header">
+                        Actions
+                    </th>
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+            {% for computer in computers %}
+
+                <tr>
+
+                    <td>
+
+                        <strong>
+                            {{ computer.Code }}
+                        </strong>
+
+                    </td>
+
+
+                    <td>
+                        {{ computer.Type }}
+                    </td>
+
+
+                    <td>
+                        {{ computer.Brand }}
+                    </td>
+
+
+                    <td>
+                        {{ computer.Model }}
+                    </td>
+
+
+                    <td>
+                        {{ computer.SerialNumber }}
+                    </td>
+
+
+                    <td>
+                        {{ computer.FixedAsset }}
+                    </td>
+
+
+                    <td>
+
+                        <span
+                            class="equipment-status status-{{ computer.Status|lower }}"
+                        >
+                            {{ computer.Status }}
+                        </span>
+
+                    </td>
+
+
+                    <td class="actions-cell">
+
+                        <div class="table-actions">
+
+                            <a
+                                href="/inventory/{{ computer.ComputerID }}/edit"
+                                class="edit-button"
+                            >
+                                Edit
+                            </a>
+
+                            <a
+                                href="/inventory/{{ computer.ComputerID }}"
+                                class="view-button"
+                            >
+                                View
+                            </a>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            {% else %}
+
+                <tr>
+
+                    <td
+                        colspan="8"
+                        class="empty-row"
+                    >
+                        No equipment found.
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,267 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ employee.EmployeeName }} | AssetFlow TI
+{% endblock %}
+
+{% block content %}
+
+<header class="detail-header">
+
+    <div>
+
+        <a
+            href="/employees"
+            class="back-link"
+        >
+            ← Back to Employees
+        </a>
+
+        <h2>
+            {{ employee.EmployeeName }}
+        </h2>
+
+        <p>
+            {{ employee.Position or "No position registered" }}
+        </p>
+
+    </div>
+
+
+    <div class="detail-actions">
+
+        {% if employee.Active == 1 %}
+
+        <span class="employee-status status-active">
+            Active
+        </span>
+
+        {% else %}
+
+        <span class="employee-status status-inactive">
+            Inactive
+        </span>
+
+        {% endif %}
+
+        <a
+            href="/employees/{{ employee.EmployeeID }}/edit"
+            class="primary-button"
+        >
+            Edit Employee
+        </a>
+
+    </div>
+
+</header>
+
+
+<section class="detail-grid">
+
+    <article class="detail-card">
+
+        <h3>
+            Employee Information
+        </h3>
+
+        <div class="detail-list">
+
+            <div>
+                <span>Position</span>
+                <strong>
+                    {{ employee.Position or "-" }}
+                </strong>
+            </div>
+
+            <div>
+                <span>Area</span>
+                <strong>
+                    {{ employee.Area or "-" }}
+                </strong>
+            </div>
+
+            <div>
+                <span>Business Line</span>
+                <strong>
+                    {{ employee.BusinessLine or "-" }}
+                </strong>
+            </div>
+
+            <div>
+                <span>Site</span>
+                <strong>
+                    {{ employee.Site or "-" }}
+                </strong>
+            </div>
+
+            <div>
+                <span>City</span>
+                <strong>
+                    {{ employee.City or "-" }}
+                </strong>
+            </div>
+
+            <div>
+                <span>Office</span>
+                <strong>
+                    {{ employee.Office or "-" }}
+                </strong>
+            </div>
+
+            <div>
+                <span>Direct Supervisor</span>
+
+                <strong>
+                    {{ employee.DirectSupervisor or "-" }}
+                </strong>
+            </div>
+
+        </div>
+
+    </article>
+
+
+    <article class="detail-card">
+
+        <h3>
+            Current Equipment
+        </h3>
+
+        {% if equipment %}
+
+        <div class="employee-equipment-list">
+
+            {% for item in equipment %}
+
+            <a
+                href="/inventory/{{ item.ComputerID }}"
+                class="employee-equipment-item"
+            >
+
+                <div>
+
+                    <strong>
+                        {{ item.Code }}
+                    </strong>
+
+                    <span>
+                        {{ item.Brand }} {{ item.Model }}
+                    </span>
+
+                </div>
+
+                <span>
+                    {{ item.Type }}
+                </span>
+
+            </a>
+
+            {% endfor %}
+
+        </div>
+
+        {% else %}
+
+        <p class="no-data">
+            No equipment currently assigned.
+        </p>
+
+        {% endif %}
+
+    </article>
+
+</section>
+
+
+<section class="panel employee-history">
+
+    <div class="panel-header">
+
+        <div>
+
+            <h3>
+                Assignment History
+            </h3>
+
+            <p>
+                Equipment previously assigned
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Code</th>
+                    <th>Equipment</th>
+                    <th>Assignment Date</th>
+                    <th>Return Date</th>
+                    <th>Status</th>
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+            {% for item in assignment_history %}
+
+                <tr>
+
+                    <td>
+
+                        <strong>
+                            {{ item.Code }}
+                        </strong>
+
+                    </td>
+
+                    <td>
+                        {{ item.Brand }} {{ item.Model }}
+                    </td>
+
+                    <td>
+                        {{ item.AssignmentDate }}
+                    </td>
+
+                    <td>
+                        {{ item.ReturnDate or "-" }}
+                    </td>
+
+                    <td>
+                        {{ item.Status }}
+                    </td>
+
+                </tr>
+
+            {% else %}
+
+                <tr>
+
+                    <td
+                        colspan="5"
+                        class="empty-row"
+                    >
+                        No assignment history.
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+{% endblock %}

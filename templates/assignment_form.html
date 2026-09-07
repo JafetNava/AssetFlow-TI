@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+
+{% block title %}
+New Assignment | AssetFlow TI
+{% endblock %}
+
+{% block content %}
+
+<header class="page-header">
+
+    <div>
+
+        <a
+            href="/assignments"
+            class="back-link"
+        >
+            ← Back to Assignments
+        </a>
+
+        <h2>
+            New Assignment
+        </h2>
+
+        <p>
+            Assign available equipment to an employee
+        </p>
+
+    </div>
+
+</header>
+
+
+{% if error %}
+
+<div class="alert-error">
+    {{ error }}
+</div>
+
+{% endif %}
+
+
+<form
+    method="POST"
+    class="equipment-form"
+>
+
+    <section class="form-section">
+
+        <h3>
+            Assignment Information
+        </h3>
+
+        <div class="form-grid">
+
+            <div class="form-group">
+
+                <label for="computer_id">
+                    Equipment *
+                </label>
+
+                <select
+                    id="computer_id"
+                    name="computer_id"
+                    required
+                >
+
+                    <option value="">
+                        Select equipment
+                    </option>
+
+                    {% for computer in computers %}
+
+                    <option
+                        value="{{ computer.ComputerID }}"
+                    >
+                        {{ computer.Code }}
+                        —
+                        {{ computer.Brand }}
+                        {{ computer.Model }}
+                        —
+                        {{ computer.SerialNumber }}
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="employee_id">
+                    Employee *
+                </label>
+
+                <select
+                    id="employee_id"
+                    name="employee_id"
+                    required
+                >
+
+                    <option value="">
+                        Select employee
+                    </option>
+
+                    {% for employee in employees %}
+
+                    <option
+                        value="{{ employee.EmployeeID }}"
+                    >
+                        {{ employee.EmployeeName }}
+                        —
+                        {{ employee.Position or "No position" }}
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="assignment_date">
+                    Assignment Date *
+                </label>
+
+                <input
+                    type="date"
+                    id="assignment_date"
+                    name="assignment_date"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="office">
+                    Office
+                </label>
+
+                <input
+                    type="text"
+                    id="office"
+                    name="office"
+                >
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section class="form-section">
+
+        <h3>
+            Comments
+        </h3>
+
+        <div class="form-group">
+
+            <textarea
+                name="comments"
+                rows="5"
+                placeholder="Assignment observations..."
+            ></textarea>
+
+        </div>
+
+    </section>
+
+
+    <div class="form-actions">
+
+        <a
+            href="/assignments"
+            class="secondary-button"
+        >
+            Cancel
+        </a>
+
+        <button
+            type="submit"
+            class="primary-button"
+        >
+            Assign Equipment
+        </button>
+
+    </div>
+
+</form>
+
+{% endblock %}

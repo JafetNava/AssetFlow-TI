@@ -1,0 +1,490 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ computer.Code }} | AssetFlow TI
+{% endblock %}
+
+{% block content %}
+
+<header class="detail-header">
+
+    <div>
+
+        <a
+            href="/inventory"
+            class="back-link"
+        >
+            ← Back to Inventory
+        </a>
+
+        <h2>
+            {{ computer.Code }}
+        </h2>
+
+        <p>
+            {{ computer.Brand or "-" }}
+            {{ computer.Model or "-" }}
+        </p>
+
+    </div>
+
+
+    <div class="detail-actions">
+
+        <span
+            class="equipment-status
+            status-{{ computer.Status|lower }}"
+        >
+            {{ computer.Status }}
+        </span>
+
+        <a
+            href="/maintenance/new?computer_id={{ computer.ComputerID }}"
+            class="secondary-button"
+        >
+            Add Maintenance
+        </a>
+
+        <a
+            href="/inventory/{{ computer.ComputerID }}/edit"
+            class="primary-button"
+        >
+            Edit Equipment
+        </a>
+
+    </div>
+
+</header>
+
+
+<section class="detail-grid">
+
+    <article class="detail-card">
+
+        <h3>
+            Equipment Information
+        </h3>
+
+        <div class="detail-list">
+
+            <div>
+                <span>Type</span>
+
+                <strong>
+                    {{ computer.Type or "-" }}
+                </strong>
+            </div>
+
+
+            <div>
+                <span>Brand</span>
+
+                <strong>
+                    {{ computer.Brand or "-" }}
+                </strong>
+            </div>
+
+
+            <div>
+                <span>Model</span>
+
+                <strong>
+                    {{ computer.Model or "-" }}
+                </strong>
+            </div>
+
+
+            <div>
+                <span>Serial Number</span>
+
+                <strong>
+                    {{ computer.SerialNumber or "-" }}
+                </strong>
+            </div>
+
+
+            <div>
+                <span>Fixed Asset</span>
+
+                <strong>
+                    {{ computer.FixedAsset or "-" }}
+                </strong>
+            </div>
+
+
+            <div>
+                <span>Charger Serial</span>
+
+                <strong>
+                    {{ computer.ChargerSerialNumber or "-" }}
+                </strong>
+            </div>
+
+        </div>
+
+    </article>
+
+
+    <article class="detail-card">
+
+        <h3>
+            Technical Specifications
+        </h3>
+
+        <div class="detail-list">
+
+            <div>
+                <span>Processor</span>
+
+                <strong>
+                    {{ computer.Processor or "-" }}
+                </strong>
+            </div>
+
+
+            <div>
+                <span>RAM</span>
+
+                <strong>
+                    {{ computer.RAM or "-" }}
+                </strong>
+            </div>
+
+
+            <div>
+                <span>Operating System</span>
+
+                <strong>
+                    {{ computer.OperatingSystem or "-" }}
+                </strong>
+            </div>
+
+
+            <div>
+                <span>WiFi MAC</span>
+
+                <strong>
+                    {{ computer.WifiMacAddress or "-" }}
+                </strong>
+            </div>
+
+
+            <div>
+                <span>Ethernet MAC</span>
+
+                <strong>
+                    {{ computer.EthernetMacAddress or "-" }}
+                </strong>
+            </div>
+
+        </div>
+
+    </article>
+
+
+    <article class="detail-card">
+
+        <h3>
+            Purchase Information
+        </h3>
+
+        <div class="detail-list">
+
+            <div>
+                <span>Purchase Year</span>
+
+                <strong>
+                    {{ computer.PurchaseYear or "-" }}
+                </strong>
+            </div>
+
+
+            <div>
+                <span>Purchase Month</span>
+
+                <strong>
+                    {{ computer.PurchaseMonth or "-" }}
+                </strong>
+            </div>
+
+
+            <div>
+                <span>Warranty</span>
+
+                <strong>
+                    {{ computer.InitialWarranty or "-" }}
+                </strong>
+            </div>
+
+
+            <div>
+                <span>Invoice</span>
+
+                <strong>
+                    {{ computer.Invoice or "-" }}
+                </strong>
+            </div>
+
+
+            <div>
+                <span>Purchase Order</span>
+
+                <strong>
+                    {{ computer.PurchaseOrder or "-" }}
+                </strong>
+            </div>
+
+
+            <div>
+                <span>Entry Date</span>
+
+                <strong>
+                    {{ computer.EntryDate or "-" }}
+                </strong>
+            </div>
+
+        </div>
+
+    </article>
+
+
+    <article class="detail-card">
+
+        <h3>
+            Current Assignment
+        </h3>
+
+        {% if assignment %}
+
+        <div class="detail-list">
+
+            <div>
+                <span>Employee</span>
+
+                <strong>
+                    {{ assignment.EmployeeName or "-" }}
+                </strong>
+            </div>
+
+
+            <div>
+                <span>Position</span>
+
+                <strong>
+                    {{ assignment.Position or "-" }}
+                </strong>
+            </div>
+
+
+            <div>
+                <span>Area</span>
+
+                <strong>
+                    {{ assignment.Area or "-" }}
+                </strong>
+            </div>
+
+
+            <div>
+                <span>Office</span>
+
+                <strong>
+                    {{ assignment.Office or "-" }}
+                </strong>
+            </div>
+
+
+            <div>
+                <span>Assignment Date</span>
+
+                <strong>
+                    {{ assignment.AssignmentDate or "-" }}
+                </strong>
+            </div>
+
+        </div>
+
+        {% else %}
+
+        <p class="no-data">
+            No active assignment.
+        </p>
+
+        {% endif %}
+
+    </article>
+
+
+    <article class="detail-card">
+
+        <h3>
+            Last Maintenance
+        </h3>
+
+        {% if maintenance %}
+
+        <div class="detail-list">
+
+            <div>
+                <span>Date</span>
+
+                <strong>
+                    {{ maintenance.MaintenanceDate or "-" }}
+                </strong>
+            </div>
+
+
+            <div>
+                <span>Next Maintenance</span>
+
+                <strong>
+                    {{ maintenance.NextMaintenanceDate or "-" }}
+                </strong>
+            </div>
+
+
+            <div>
+                <span>Type</span>
+
+                <strong>
+                    {{ maintenance.MaintenanceType or "-" }}
+                </strong>
+            </div>
+
+
+            <div>
+                <span>Technician</span>
+
+                <strong>
+                    {{ maintenance.Technician or "-" }}
+                </strong>
+            </div>
+
+        </div>
+
+        {% else %}
+
+        <p class="no-data">
+            No maintenance records.
+        </p>
+
+        {% endif %}
+
+    </article>
+
+
+    <article class="detail-card">
+
+        <h3>
+            Comments
+        </h3>
+
+        <p class="comments">
+            {{ computer.Comments or "No comments." }}
+        </p>
+
+    </article>
+
+</section>
+<section class="panel equipment-activity-panel">
+
+    <div class="panel-header">
+
+        <div>
+
+            <h3>
+                Activity History
+            </h3>
+
+            <p>
+                Latest equipment movements and changes
+            </p>
+
+        </div>
+
+        <a
+            href="/activity?search={{ computer.Code }}"
+            class="panel-link"
+        >
+            View full activity
+        </a>
+
+    </div>
+
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Date</th>
+                    <th>Event</th>
+                    <th>Description</th>
+                    <th>Previous</th>
+                    <th>New</th>
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+            {% for movement in movements %}
+
+                <tr>
+
+                    <td>
+                        {{ movement.MovementDate }}
+                    </td>
+
+
+                    <td>
+
+                        <span class="activity-type">
+                            {{ movement.MovementType }}
+                        </span>
+
+                    </td>
+
+
+                    <td>
+                        {{ movement.Description or "-" }}
+                    </td>
+
+
+                    <td>
+                        {{ movement.PreviousValue or "-" }}
+                    </td>
+
+
+                    <td>
+                        {{ movement.NewValue or "-" }}
+                    </td>
+
+                </tr>
+
+            {% else %}
+
+                <tr>
+
+                    <td
+                        colspan="5"
+                        class="empty-row"
+                    >
+                        No activity registered for this equipment.
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+{% endblock %}

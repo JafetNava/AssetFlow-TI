@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        {% block title %}
+        AssetFlow TI
+        {% endblock %}
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/styles.css') }}"
+    >
+
+    {% block head %}
+    {% endblock %}
+</head>
+
+<body>
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                AF
+            </div>
+
+            <div>
+                <h1>AssetFlow TI</h1>
+                <span>IT Asset Management</span>
+            </div>
+
+        </div>
+
+
+        <nav class="navigation">
+
+            <a
+                href="/"
+                class="{% if active_page == 'dashboard' %}active{% endif %}"
+            >
+                Dashboard
+            </a>
+
+            <a
+                href="/inventory"
+                class="{% if active_page == 'inventory' %}active{% endif %}"
+            >
+                Inventory
+            </a>
+
+            <a
+                href="/employees"
+                class="{% if active_page == 'employees' %}active{% endif %}"
+            >
+                Employees
+            </a>
+
+            <a
+                href="/assignments"
+                class="{% if active_page == 'assignments' %}active{% endif %}"
+            >
+                Assignments
+            </a>
+
+            <a
+                href="/responsibility-forms"
+                class="{% if active_page == 'responsibility_forms' %}active{% endif %}"
+            >
+                Responsibility Forms
+            </a>
+
+            <a
+                href="/maintenance"
+                class="{% if active_page == 'maintenance' %}active{% endif %}"
+            >
+                Maintenance
+            </a>
+
+            <a
+                href="/reports"
+                class="{% if active_page == 'reports' %}active{% endif %}"
+            >
+                Reports
+            </a>
+
+            <a
+                href="/backups"
+                class="{% if active_page == 'backups' %}active{% endif %}"
+            >
+                Backups
+            </a>
+            
+            <a
+                href="/activity"
+                class="{% if active_page == 'activity' %}active{% endif %}"
+            >
+                Activity Log
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <main class="main-content">
+
+        {% block content %}
+        {% endblock %}
+
+    </main>
+
+
+    {% block scripts %}
+    {% endblock %}
+
+</body>
+
+</html>

@@ -1,0 +1,288 @@
+{% extends "base.html" %}
+
+{% block title %}
+Maintenance | AssetFlow TI
+{% endblock %}
+
+{% block content %}
+
+<header class="page-header">
+
+    <div>
+        <h2>Maintenance</h2>
+
+        <p>
+            Equipment maintenance planning and history
+        </p>
+    </div>
+
+    <div class="header-actions">
+
+        <span class="system-status">
+            {{ records|length }} records
+        </span>
+
+        <a
+            href="/maintenance/new"
+            class="primary-button"
+        >
+            + New Maintenance
+        </a>
+
+    </div>
+
+</header>
+
+
+<section class="panel filter-panel">
+
+    <form
+        method="GET"
+        action="/maintenance"
+        class="employee-filters"
+    >
+
+        <div class="filter-group">
+
+            <label for="search">
+                Search
+            </label>
+
+            <input
+                type="text"
+                id="search"
+                name="search"
+                value="{{ search }}"
+                placeholder="Code, serial, model, technician..."
+            >
+
+        </div>
+
+
+        <div class="filter-group">
+
+            <label for="status">
+                Schedule Status
+            </label>
+
+            <select
+                id="status"
+                name="status"
+            >
+
+                <option value="">
+                    All
+                </option>
+
+                <option
+                    value="overdue"
+                    {% if selected_status == "overdue" %}
+                        selected
+                    {% endif %}
+                >
+                    Overdue
+                </option>
+
+                <option
+                    value="due-soon"
+                    {% if selected_status == "due-soon" %}
+                        selected
+                    {% endif %}
+                >
+                    Due Soon
+                </option>
+
+                <option
+                    value="scheduled"
+                    {% if selected_status == "scheduled" %}
+                        selected
+                    {% endif %}
+                >
+                    Scheduled
+                </option>
+
+                <option
+                    value="no-schedule"
+                    {% if selected_status == "no-schedule" %}
+                        selected
+                    {% endif %}
+                >
+                    No Schedule
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="filter-actions">
+
+            <button
+                type="submit"
+                class="primary-button"
+            >
+                Filter
+            </button>
+
+            <a
+                href="/maintenance"
+                class="secondary-button"
+            >
+                Clear
+            </a>
+
+        </div>
+
+    </form>
+
+</section>
+
+
+<section class="panel">
+
+    <div class="panel-header">
+
+        <div>
+
+            <h3>
+                Maintenance History
+            </h3>
+
+            <p>
+                Registered equipment maintenance
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Equipment</th>
+                    <th>Type</th>
+                    <th>Maintenance Date</th>
+                    <th>Next Maintenance</th>
+                    <th>Technician</th>
+                    <th>Schedule</th>
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+            {% for record in records %}
+
+                <tr>
+
+                    <td>
+
+                        <a
+                            href="/inventory/{{ record.ComputerID }}"
+                            class="table-link"
+                        >
+
+                            <strong>
+                                {{ record.Code }}
+                            </strong>
+
+                        </a>
+
+                        <div class="table-subtext">
+                            {{ record.Brand }}
+                            {{ record.Model }}
+                        </div>
+
+                    </td>
+
+
+                    <td>
+                        {{ record.MaintenanceType or "-" }}
+                    </td>
+
+
+                    <td>
+                        {{ record.MaintenanceDate }}
+                    </td>
+
+
+                    <td>
+                        {{ record.NextMaintenanceDate or "-" }}
+                    </td>
+
+
+                    <td>
+                        {{ record.Technician or "-" }}
+                    </td>
+
+
+                    <td>
+
+                        {% if record.MaintenanceStatus == "Overdue" %}
+
+                            <span
+                                class="maintenance-status maintenance-overdue"
+                            >
+                                Overdue
+                            </span>
+
+                        {% elif record.MaintenanceStatus == "Due Soon" %}
+
+                            <span
+                                class="maintenance-status maintenance-due"
+                            >
+                                Due Soon
+                            </span>
+
+                        {% elif record.MaintenanceStatus == "Scheduled" %}
+
+                            <span
+                                class="maintenance-status maintenance-scheduled"
+                            >
+                                Scheduled
+                            </span>
+
+                        {% else %}
+
+                            <span
+                                class="maintenance-status maintenance-none"
+                            >
+                                No Schedule
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+            {% else %}
+
+                <tr>
+
+                    <td
+                        colspan="6"
+                        class="empty-row"
+                    >
+                        No maintenance records found.
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+{% endblock %}

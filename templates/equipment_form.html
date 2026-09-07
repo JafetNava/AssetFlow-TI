@@ -1,0 +1,529 @@
+{% extends "base.html" %}
+
+{% block title %}
+{% if mode == "create" %}
+New Equipment | AssetFlow TI
+{% else %}
+Edit Equipment | AssetFlow TI
+{% endif %}
+{% endblock %}
+
+{% block content %}
+
+<header class="page-header">
+
+    <div>
+
+        <a
+            href="/inventory"
+            class="back-link"
+        >
+            ← Back to Inventory
+        </a>
+
+        <h2>
+            {% if mode == "create" %}
+                New Equipment
+            {% else %}
+                Edit Equipment
+            {% endif %}
+        </h2>
+
+        <p>
+            Equipment information and technical specifications
+        </p>
+
+    </div>
+
+</header>
+
+
+{% if error %}
+
+<div class="alert-error">
+    {{ error }}
+</div>
+
+{% endif %}
+
+
+<form
+    method="POST"
+    class="equipment-form"
+>
+
+    <section class="form-section">
+
+        <h3>
+            General Information
+        </h3>
+
+        <div class="form-grid">
+
+            <div class="form-group">
+
+                <label for="code">
+                    Code *
+                </label>
+
+                <input
+                    type="text"
+                    id="code"
+                    name="code"
+                    required
+                    value="{{ request.form.get(
+                        'code',
+                        equipment.Code if equipment else ''
+                    ) }}"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="type">
+                    Type *
+                </label>
+
+                <input
+                    type="text"
+                    id="type"
+                    name="type"
+                    required
+                    placeholder="Laptop, Desktop..."
+                    value="{{ request.form.get(
+                        'type',
+                        equipment.Type if equipment else ''
+                    ) }}"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="brand">
+                    Brand
+                </label>
+
+                <input
+                    type="text"
+                    id="brand"
+                    name="brand"
+                    value="{{ request.form.get(
+                        'brand',
+                        equipment.Brand if equipment else ''
+                    ) }}"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="model">
+                    Model
+                </label>
+
+                <input
+                    type="text"
+                    id="model"
+                    name="model"
+                    value="{{ request.form.get(
+                        'model',
+                        equipment.Model if equipment else ''
+                    ) }}"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="serial_number">
+                    Serial Number *
+                </label>
+
+                <input
+                    type="text"
+                    id="serial_number"
+                    name="serial_number"
+                    required
+                    value="{{ request.form.get(
+                        'serial_number',
+                        equipment.SerialNumber if equipment else ''
+                    ) }}"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="charger_serial_number">
+                    Charger Serial Number
+                </label>
+
+                <input
+                    type="text"
+                    id="charger_serial_number"
+                    name="charger_serial_number"
+                    value="{{ request.form.get(
+                        'charger_serial_number',
+                        equipment.ChargerSerialNumber if equipment else ''
+                    ) }}"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="fixed_asset">
+                    Fixed Asset
+                </label>
+
+                <input
+                    type="text"
+                    id="fixed_asset"
+                    name="fixed_asset"
+                    value="{{ request.form.get(
+                        'fixed_asset',
+                        equipment.FixedAsset if equipment else ''
+                    ) }}"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="status">
+                    Status
+                </label>
+
+                {% set current_status = request.form.get(
+                    'status',
+                    equipment.Status if equipment else 'Available'
+                ) %}
+
+                <select
+                    id="status"
+                    name="status"
+                >
+
+                    {% for status in statuses %}
+
+                    <option
+                        value="{{ status }}"
+                        {% if current_status == status %}
+                            selected
+                        {% endif %}
+                    >
+                        {{ status }}
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section class="form-section">
+
+        <h3>
+            Technical Specifications
+        </h3>
+
+        <div class="form-grid">
+
+            <div class="form-group">
+
+                <label for="processor">
+                    Processor
+                </label>
+
+                <input
+                    type="text"
+                    id="processor"
+                    name="processor"
+                    value="{{ request.form.get(
+                        'processor',
+                        equipment.Processor if equipment else ''
+                    ) }}"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="ram">
+                    RAM
+                </label>
+
+                <input
+                    type="text"
+                    id="ram"
+                    name="ram"
+                    placeholder="16 GB"
+                    value="{{ request.form.get(
+                        'ram',
+                        equipment.RAM if equipment else ''
+                    ) }}"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="operating_system">
+                    Operating System
+                </label>
+
+                <input
+                    type="text"
+                    id="operating_system"
+                    name="operating_system"
+                    value="{{ request.form.get(
+                        'operating_system',
+                        equipment.OperatingSystem if equipment else ''
+                    ) }}"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="wifi_mac">
+                    WiFi MAC Address
+                </label>
+
+                <input
+                    type="text"
+                    id="wifi_mac"
+                    name="wifi_mac"
+                    value="{{ request.form.get(
+                        'wifi_mac',
+                        equipment.WifiMacAddress if equipment else ''
+                    ) }}"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="ethernet_mac">
+                    Ethernet MAC Address
+                </label>
+
+                <input
+                    type="text"
+                    id="ethernet_mac"
+                    name="ethernet_mac"
+                    value="{{ request.form.get(
+                        'ethernet_mac',
+                        equipment.EthernetMacAddress if equipment else ''
+                    ) }}"
+                >
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section class="form-section">
+
+        <h3>
+            Purchase Information
+        </h3>
+
+        <div class="form-grid">
+
+            <div class="form-group">
+
+                <label for="purchase_year">
+                    Purchase Year
+                </label>
+
+                <input
+                    type="number"
+                    id="purchase_year"
+                    name="purchase_year"
+                    min="2000"
+                    max="2100"
+                    value="{{ request.form.get(
+                        'purchase_year',
+                        equipment.PurchaseYear
+                        if equipment and equipment.PurchaseYear
+                        else ''
+                    ) }}"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="purchase_month">
+                    Purchase Month
+                </label>
+
+                <input
+                    type="number"
+                    id="purchase_month"
+                    name="purchase_month"
+                    min="1"
+                    max="12"
+                    value="{{ request.form.get(
+                        'purchase_month',
+                        equipment.PurchaseMonth
+                        if equipment and equipment.PurchaseMonth
+                        else ''
+                    ) }}"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="initial_warranty">
+                    Warranty End Date
+                </label>
+
+                <input
+                    type="date"
+                    id="initial_warranty"
+                    name="initial_warranty"
+                    value="{{ request.form.get(
+                        'initial_warranty',
+                        equipment.InitialWarranty if equipment else ''
+                    ) }}"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="invoice">
+                    Invoice
+                </label>
+
+                <input
+                    type="text"
+                    id="invoice"
+                    name="invoice"
+                    value="{{ request.form.get(
+                        'invoice',
+                        equipment.Invoice if equipment else ''
+                    ) }}"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="purchase_order">
+                    Purchase Order
+                </label>
+
+                <input
+                    type="text"
+                    id="purchase_order"
+                    name="purchase_order"
+                    value="{{ request.form.get(
+                        'purchase_order',
+                        equipment.PurchaseOrder if equipment else ''
+                    ) }}"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="entry_date">
+                    Entry Date
+                </label>
+
+                <input
+                    type="date"
+                    id="entry_date"
+                    name="entry_date"
+                    value="{{ request.form.get(
+                        'entry_date',
+                        equipment.EntryDate if equipment else ''
+                    ) }}"
+                >
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section class="form-section">
+
+        <h3>
+            Comments
+        </h3>
+
+        <div class="form-group">
+
+            <textarea
+                id="comments"
+                name="comments"
+                rows="5"
+                placeholder="Additional information..."
+            >{{ request.form.get(
+                'comments',
+                equipment.Comments
+                if equipment and equipment.Comments
+                else ''
+            ) }}</textarea>
+
+        </div>
+
+    </section>
+
+
+    <div class="form-actions">
+
+        <a
+            href="/inventory"
+            class="secondary-button"
+        >
+            Cancel
+        </a>
+
+        <button
+            type="submit"
+            class="primary-button"
+        >
+            {% if mode == "create" %}
+                Save Equipment
+            {% else %}
+                Save Changes
+            {% endif %}
+        </button>
+
+    </div>
+
+</form>
+
+{% endblock %}

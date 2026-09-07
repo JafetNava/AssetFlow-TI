@@ -1,0 +1,444 @@
+{% extends "base.html" %}
+
+{% block title %}
+Dashboard | AssetFlow TI
+{% endblock %}
+
+{% block content %}
+
+<header class="page-header">
+
+    <div>
+
+        <h2>
+            Dashboard
+        </h2>
+
+        <p>
+            General overview of IT assets
+        </p>
+
+    </div>
+
+    <div class="system-status">
+        Local System
+    </div>
+
+</header>
+
+
+<section class="dashboard-stats">
+
+    <a
+        href="/inventory"
+        class="dashboard-card"
+    >
+
+        <span>
+            Total Equipment
+        </span>
+
+        <strong>
+            {{ total_computers }}
+        </strong>
+
+        <small>
+            Registered assets
+        </small>
+
+    </a>
+
+
+    <a
+        href="/inventory?status=Assigned"
+        class="dashboard-card"
+    >
+
+        <span>
+            Assigned
+        </span>
+
+        <strong>
+            {{ assigned }}
+        </strong>
+
+        <small>
+            In use
+        </small>
+
+    </a>
+
+
+    <a
+        href="/inventory?status=Available"
+        class="dashboard-card"
+    >
+
+        <span>
+            Available
+        </span>
+
+        <strong>
+            {{ available }}
+        </strong>
+
+        <small>
+            Ready to assign
+        </small>
+
+    </a>
+
+
+    <a
+        href="/inventory?status=Maintenance"
+        class="dashboard-card"
+    >
+
+        <span>
+            Maintenance
+        </span>
+
+        <strong>
+            {{ maintenance }}
+        </strong>
+
+        <small>
+            Equipment status
+        </small>
+
+    </a>
+
+
+    <a
+        href="/employees?status=active"
+        class="dashboard-card"
+    >
+
+        <span>
+            Active Employees
+        </span>
+
+        <strong>
+            {{ total_employees }}
+        </strong>
+
+        <small>
+            Registered personnel
+        </small>
+
+    </a>
+
+</section>
+
+
+<section class="dashboard-alerts">
+
+    <a
+        href="/maintenance?status=overdue"
+        class="alert-card alert-danger"
+    >
+
+        <div>
+
+            <span>
+                Maintenance Overdue
+            </span>
+
+            <strong>
+                {{ overdue_maintenance }}
+            </strong>
+
+        </div>
+
+        <p>
+            Equipment requiring attention
+        </p>
+
+    </a>
+
+
+    <a
+        href="/maintenance?status=due-soon"
+        class="alert-card alert-warning"
+    >
+
+        <div>
+
+            <span>
+                Due in 30 Days
+            </span>
+
+            <strong>
+                {{ due_soon_maintenance }}
+            </strong>
+
+        </div>
+
+        <p>
+            Upcoming maintenance
+        </p>
+
+    </a>
+
+
+    <a
+        href="/responsibility-forms?status=Generated"
+        class="alert-card alert-info"
+    >
+
+        <div>
+
+            <span>
+                Pending Forms
+            </span>
+
+            <strong>
+                {{ pending_forms }}
+            </strong>
+
+        </div>
+
+        <p>
+            Waiting to be marked as signed
+        </p>
+
+    </a>
+
+</section>
+
+
+<section class="dashboard-grid">
+
+    <article class="panel">
+
+        <div class="panel-header">
+
+            <div>
+
+                <h3>
+                    Recent Assignments
+                </h3>
+
+                <p>
+                    Latest equipment movements
+                </p>
+
+            </div>
+
+            <a
+                href="/assignments"
+                class="panel-link"
+            >
+                View all
+            </a>
+
+        </div>
+
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Equipment</th>
+                        <th>Employee</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                {% for assignment in recent_assignments %}
+
+                    <tr>
+
+                        <td>
+
+                            <a
+                                href="/inventory/{{ assignment.ComputerID }}"
+                                class="table-link"
+                            >
+
+                                <strong>
+                                    {{ assignment.Code }}
+                                </strong>
+
+                            </a>
+
+                            <div class="table-subtext">
+                                {{ assignment.Brand }}
+                                {{ assignment.Model }}
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            {{ assignment.EmployeeName }}
+
+                            <div class="table-subtext">
+                                {{ assignment.Office or "-" }}
+                            </div>
+
+                        </td>
+
+
+                        <td>
+                            {{ assignment.AssignmentDate }}
+                        </td>
+
+
+                        <td>
+
+                            {% if assignment.Status == "Active" %}
+
+                            <span
+                                class="employee-status status-active"
+                            >
+                                Active
+                            </span>
+
+                            {% else %}
+
+                            <span
+                                class="employee-status status-inactive"
+                            >
+                                Finalized
+                            </span>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                {% else %}
+
+                    <tr>
+
+                        <td
+                            colspan="4"
+                            class="empty-row"
+                        >
+                            No assignments found.
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </article>
+
+
+    <article class="panel">
+
+        <div class="panel-header">
+
+            <div>
+
+                <h3>
+                    Upcoming Maintenance
+                </h3>
+
+                <p>
+                    Next scheduled services
+                </p>
+
+            </div>
+
+            <a
+                href="/maintenance"
+                class="panel-link"
+            >
+                View all
+            </a>
+
+        </div>
+
+
+        <div class="maintenance-dashboard-list">
+
+        {% for item in upcoming_maintenance %}
+
+            <a
+                href="/inventory/{{ item.ComputerID }}"
+                class="maintenance-dashboard-item"
+            >
+
+                <div>
+
+                    <strong>
+                        {{ item.Code }}
+                    </strong>
+
+                    <span>
+                        {{ item.Brand }}
+                        {{ item.Model }}
+                    </span>
+
+                </div>
+
+
+                <div class="maintenance-dashboard-date">
+
+                    <strong>
+                        {{ item.NextMaintenanceDate }}
+                    </strong>
+
+                    {% if item.MaintenanceStatus == "Overdue" %}
+
+                    <span
+                        class="maintenance-status maintenance-overdue"
+                    >
+                        Overdue
+                    </span>
+
+                    {% elif item.MaintenanceStatus == "Due Soon" %}
+
+                    <span
+                        class="maintenance-status maintenance-due"
+                    >
+                        Due Soon
+                    </span>
+
+                    {% else %}
+
+                    <span
+                        class="maintenance-status maintenance-scheduled"
+                    >
+                        Scheduled
+                    </span>
+
+                    {% endif %}
+
+                </div>
+
+            </a>
+
+        {% else %}
+
+            <div class="dashboard-empty">
+                No scheduled maintenance.
+            </div>
+
+        {% endfor %}
+
+        </div>
+
+    </article>
+
+</section>
+
+{% endblock %}

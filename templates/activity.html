@@ -1,0 +1,234 @@
+{% extends "base.html" %}
+
+{% block title %}
+Activity Log | AssetFlow TI
+{% endblock %}
+
+{% block content %}
+
+<header class="page-header">
+
+    <div>
+
+        <h2>
+            Activity Log
+        </h2>
+
+        <p>
+            Equipment movement and change history
+        </p>
+
+    </div>
+
+    <span class="system-status">
+        {{ movements|length }} records
+    </span>
+
+</header>
+
+
+<section class="panel filter-panel">
+
+    <form
+        method="GET"
+        action="/activity"
+        class="employee-filters"
+    >
+
+        <div class="filter-group">
+
+            <label for="search">
+                Search
+            </label>
+
+            <input
+                type="text"
+                id="search"
+                name="search"
+                value="{{ search }}"
+                placeholder="Code, serial, description..."
+            >
+
+        </div>
+
+
+        <div class="filter-group">
+
+            <label for="type">
+                Movement Type
+            </label>
+
+            <select
+                id="type"
+                name="type"
+            >
+
+                <option value="">
+                    All
+                </option>
+
+                {% for item in movement_types %}
+
+                <option
+                    value="{{ item.MovementType }}"
+                    {% if selected_type == item.MovementType %}
+                        selected
+                    {% endif %}
+                >
+                    {{ item.MovementType }}
+                </option>
+
+                {% endfor %}
+
+            </select>
+
+        </div>
+
+
+        <div class="filter-actions">
+
+            <button
+                type="submit"
+                class="primary-button"
+            >
+                Filter
+            </button>
+
+            <a
+                href="/activity"
+                class="secondary-button"
+            >
+                Clear
+            </a>
+
+        </div>
+
+    </form>
+
+</section>
+
+
+<section class="panel">
+
+    <div class="panel-header">
+
+        <div>
+
+            <h3>
+                Equipment Activity
+            </h3>
+
+            <p>
+                Chronological record of equipment changes
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Date</th>
+                    <th>Equipment</th>
+                    <th>Event</th>
+                    <th>Description</th>
+                    <th>Previous</th>
+                    <th>New</th>
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+            {% for movement in movements %}
+
+                <tr>
+
+                    <td>
+                        {{ movement.MovementDate }}
+                    </td>
+
+
+                    <td>
+
+                        {% if movement.ComputerID %}
+
+                        <a
+                            href="/inventory/{{ movement.ComputerID }}"
+                            class="table-link"
+                        >
+                            <strong>
+                                {{ movement.Code or "-" }}
+                            </strong>
+                        </a>
+
+                        <div class="table-subtext">
+                            {{ movement.Brand or "" }}
+                            {{ movement.Model or "" }}
+                        </div>
+
+                        {% else %}
+
+                            -
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <td>
+
+                        <span class="activity-type">
+                            {{ movement.MovementType }}
+                        </span>
+
+                    </td>
+
+
+                    <td>
+                        {{ movement.Description or "-" }}
+                    </td>
+
+
+                    <td>
+                        {{ movement.PreviousValue or "-" }}
+                    </td>
+
+
+                    <td>
+                        {{ movement.NewValue or "-" }}
+                    </td>
+
+                </tr>
+
+            {% else %}
+
+                <tr>
+
+                    <td
+                        colspan="6"
+                        class="empty-row"
+                    >
+                        No activity records found.
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+{% endblock %}

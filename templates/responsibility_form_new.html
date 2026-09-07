@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+{% block title %}
+New Responsibility Form | AssetFlow TI
+{% endblock %}
+
+{% block content %}
+
+<header class="page-header">
+
+    <div>
+
+        <a
+            href="/responsibility-forms"
+            class="back-link"
+        >
+            ← Back to Responsibility Forms
+        </a>
+
+        <h2>
+            New Responsibility Form
+        </h2>
+
+        <p>
+            Generate a document from an active assignment
+        </p>
+
+    </div>
+
+</header>
+
+
+{% if error %}
+
+<div class="alert-error">
+    {{ error }}
+</div>
+
+{% endif %}
+
+
+<form
+    method="POST"
+    class="equipment-form"
+>
+
+    <section class="form-section">
+
+        <h3>
+            Assignment Information
+        </h3>
+
+        <div class="form-grid">
+
+            <div class="form-group form-full-width">
+
+                <label for="assignment_id">
+                    Assignment *
+                </label>
+
+                <select
+                    id="assignment_id"
+                    name="assignment_id"
+                    required
+                >
+
+                    <option value="">
+                        Select an active assignment
+                    </option>
+
+                    {% for assignment in assignments %}
+
+                    <option
+                        value="{{ assignment.AssignmentID }}"
+                        {% if selected_assignment_id|string == assignment.AssignmentID|string %}
+                            selected
+                        {% endif %}
+                    >
+                        {{ assignment.EmployeeName }}
+                        —
+                        {{ assignment.Code }}
+                        —
+                        {{ assignment.Brand }}
+                        {{ assignment.Model }}
+                        —
+                        {{ assignment.SerialNumber }}
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="generation_date">
+                    Generation Date *
+                </label>
+
+                <input
+                    type="date"
+                    id="generation_date"
+                    name="generation_date"
+                    value="{{ today }}"
+                    required
+                >
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section class="form-section">
+
+        <h3>
+            Comments
+        </h3>
+
+        <div class="form-group">
+
+            <textarea
+                name="comments"
+                rows="5"
+                placeholder="Optional observations..."
+            >{{ comments or "" }}</textarea>
+
+        </div>
+
+    </section>
+
+
+    <div class="form-actions">
+
+        <a
+            href="/responsibility-forms"
+            class="secondary-button"
+        >
+            Cancel
+        </a>
+
+        <button
+            type="submit"
+            class="primary-button"
+        >
+            Generate PDF
+        </button>
+
+    </div>
+
+</form>
+
+{% endblock %}

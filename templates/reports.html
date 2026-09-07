@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+
+{% block title %}
+Reports | AssetFlow TI
+{% endblock %}
+
+{% block content %}
+
+<header class="page-header">
+
+    <div>
+        <h2>Reports</h2>
+        <p>Export AssetFlow TI information to Excel</p>
+    </div>
+
+</header>
+
+
+<section class="reports-grid">
+
+    <article class="report-card">
+
+        <div>
+            <span class="report-label">
+                Inventory
+            </span>
+
+            <strong>
+                {{ total_equipment }}
+            </strong>
+
+            <p>
+                Complete equipment inventory including
+                specifications, serial numbers and status.
+            </p>
+        </div>
+
+        <a
+            href="/reports/inventory"
+            class="primary-button"
+        >
+            Export Excel
+        </a>
+
+    </article>
+
+
+    <article class="report-card">
+
+        <div>
+            <span class="report-label">
+                Employees
+            </span>
+
+            <strong>
+                {{ total_employees }}
+            </strong>
+
+            <p>
+                Employee directory, location, department
+                and current status.
+            </p>
+        </div>
+
+        <a
+            href="/reports/employees"
+            class="primary-button"
+        >
+            Export Excel
+        </a>
+
+    </article>
+
+
+    <article class="report-card">
+
+        <div>
+            <span class="report-label">
+                Assignments
+            </span>
+
+            <strong>
+                {{ total_assignments }}
+            </strong>
+
+            <p>
+                Complete equipment assignment and
+                return history.
+            </p>
+        </div>
+
+        <a
+            href="/reports/assignments"
+            class="primary-button"
+        >
+            Export Excel
+        </a>
+
+    </article>
+
+
+    <article class="report-card">
+
+        <div>
+            <span class="report-label">
+                Maintenance
+            </span>
+
+            <strong>
+                {{ total_maintenance }}
+            </strong>
+
+            <p>
+                Maintenance history and upcoming
+                scheduled services.
+            </p>
+        </div>
+
+        <a
+            href="/reports/maintenance"
+            class="primary-button"
+        >
+            Export Excel
+        </a>
+
+    </article>
+
+</section>
+
+
+<section class="panel report-info">
+
+    <div class="panel-header">
+
+        <div>
+            <h3>
+                Excel Exports
+            </h3>
+
+            <p>
+                Generated files are also stored locally
+            </p>
+        </div>
+
+    </div>
+
+
+    <div class="report-info-content">
+
+        <p>
+            Files generated from this module are saved in:
+        </p>
+
+        <code>
+            AssetFlow-TI/exports/
+        </code>
+
+        <p>
+            The database is not modified when generating
+            a report.
+        </p>
+
+    </div>
+
+</section>
+
+{% endblock %}

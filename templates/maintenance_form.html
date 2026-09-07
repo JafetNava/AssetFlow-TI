@@ -1,0 +1,260 @@
+{% extends "base.html" %}
+
+{% block title %}
+New Maintenance | AssetFlow TI
+{% endblock %}
+
+{% block content %}
+
+<header class="page-header">
+
+    <div>
+
+        <a
+            href="/maintenance"
+            class="back-link"
+        >
+            ← Back to Maintenance
+        </a>
+
+        <h2>
+            New Maintenance
+        </h2>
+
+        <p>
+            Register equipment maintenance
+        </p>
+
+    </div>
+
+</header>
+
+
+{% if error %}
+
+<div class="alert-error">
+    {{ error }}
+</div>
+
+{% endif %}
+
+
+<form
+    method="POST"
+    class="equipment-form"
+>
+
+    <section class="form-section">
+
+        <h3>
+            Equipment
+        </h3>
+
+        <div class="form-grid">
+
+            <div class="form-group form-full-width">
+
+                <label for="computer_id">
+                    Equipment *
+                </label>
+
+                <select
+                    id="computer_id"
+                    name="computer_id"
+                    required
+                >
+
+                    <option value="">
+                        Select equipment
+                    </option>
+
+                    {% for computer in computers %}
+
+                    <option
+                        value="{{ computer.ComputerID }}"
+                        {% if selected_computer_id|string == computer.ComputerID|string %}
+                            selected
+                        {% endif %}
+                    >
+                        {{ computer.Code }}
+                        —
+                        {{ computer.Brand }}
+                        {{ computer.Model }}
+                        —
+                        {{ computer.SerialNumber }}
+                        —
+                        {{ computer.Status }}
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section class="form-section">
+
+        <h3>
+            Maintenance Information
+        </h3>
+
+        <div class="form-grid">
+
+            <div class="form-group">
+
+                <label for="maintenance_date">
+                    Maintenance Date *
+                </label>
+
+                <input
+                    type="date"
+                    id="maintenance_date"
+                    name="maintenance_date"
+                    value="{{ today }}"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="next_maintenance_date">
+                    Next Maintenance
+                </label>
+
+                <input
+                    type="date"
+                    id="next_maintenance_date"
+                    name="next_maintenance_date"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="maintenance_type">
+                    Maintenance Type
+                </label>
+
+                <select
+                    id="maintenance_type"
+                    name="maintenance_type"
+                >
+
+                    <option value="">
+                        Select type
+                    </option>
+
+                    <option value="Preventive">
+                        Preventive
+                    </option>
+
+                    <option value="Corrective">
+                        Corrective
+                    </option>
+
+                    <option value="Diagnostic">
+                        Diagnostic
+                    </option>
+
+                    <option value="Hardware Upgrade">
+                        Hardware Upgrade
+                    </option>
+
+                    <option value="Software">
+                        Software
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="technician">
+                    Technician
+                </label>
+
+                <input
+                    type="text"
+                    id="technician"
+                    name="technician"
+                    placeholder="IT Support"
+                >
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section class="form-section">
+
+        <h3>
+            Details
+        </h3>
+
+        <div class="form-group">
+
+            <label for="description">
+                Description
+            </label>
+
+            <textarea
+                id="description"
+                name="description"
+                rows="4"
+                placeholder="Work performed..."
+            ></textarea>
+
+        </div>
+
+
+        <div class="form-group maintenance-observations">
+
+            <label for="observations">
+                Observations
+            </label>
+
+            <textarea
+                id="observations"
+                name="observations"
+                rows="4"
+                placeholder="Additional observations..."
+            ></textarea>
+
+        </div>
+
+    </section>
+
+
+    <div class="form-actions">
+
+        <a
+            href="/maintenance"
+            class="secondary-button"
+        >
+            Cancel
+        </a>
+
+        <button
+            type="submit"
+            class="primary-button"
+        >
+            Save Maintenance
+        </button>
+
+    </div>
+
+</form>
+
+{% endblock %}

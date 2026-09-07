@@ -1,0 +1,327 @@
+{% extends "base.html" %}
+
+{% block title %}
+Responsibility Forms | AssetFlow TI
+{% endblock %}
+
+{% block content %}
+
+<header class="page-header">
+
+    <div>
+
+        <h2>
+            Responsibility Forms
+        </h2>
+
+        <p>
+            Equipment responsibility document control
+        </p>
+
+    </div>
+
+
+    <div class="header-actions">
+
+        <span class="system-status">
+            {{ forms|length }} records
+        </span>
+
+        <a
+            href="/responsibility-forms/new"
+            class="primary-button"
+        >
+            + New Form
+        </a>
+
+    </div>
+
+</header>
+
+
+<section class="panel filter-panel">
+
+    <form
+        method="GET"
+        action="/responsibility-forms"
+        class="employee-filters"
+    >
+
+        <div class="filter-group">
+
+            <label for="search">
+                Search
+            </label>
+
+            <input
+                type="text"
+                id="search"
+                name="search"
+                value="{{ search }}"
+                placeholder="Form, employee, equipment..."
+            >
+
+        </div>
+
+
+        <div class="filter-group">
+
+            <label for="status">
+                Status
+            </label>
+
+            <select
+                id="status"
+                name="status"
+            >
+
+                <option value="">
+                    All
+                </option>
+
+
+                <option
+                    value="Generated"
+                    {% if selected_status == "Generated" %}
+                        selected
+                    {% endif %}
+                >
+                    Generated
+                </option>
+
+
+                <option
+                    value="Signed"
+                    {% if selected_status == "Signed" %}
+                        selected
+                    {% endif %}
+                >
+                    Signed
+                </option>
+
+
+                <option
+                    value="Cancelled"
+                    {% if selected_status == "Cancelled" %}
+                        selected
+                    {% endif %}
+                >
+                    Cancelled
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="filter-actions">
+
+            <button
+                type="submit"
+                class="primary-button"
+            >
+                Filter
+            </button>
+
+            <a
+                href="/responsibility-forms"
+                class="secondary-button"
+            >
+                Clear
+            </a>
+
+        </div>
+
+    </form>
+
+</section>
+
+
+<section class="panel">
+
+    <div class="panel-header">
+
+        <div>
+
+            <h3>
+                Forms
+            </h3>
+
+            <p>
+                Generated responsibility documents
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Form</th>
+                    <th>Employee</th>
+                    <th>Equipment</th>
+                    <th>Serial Number</th>
+                    <th>Generated</th>
+                    <th>Status</th>
+
+                    <th class="actions-header">
+                        Actions
+                    </th>
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+            {% for form in forms %}
+
+                <tr>
+
+                    <td>
+
+                        <strong>
+                            {{ form.AcknowledgementNumber }}
+                        </strong>
+
+                    </td>
+
+
+                    <td>
+
+                        {{ form.EmployeeName }}
+
+                        <div class="table-subtext">
+                            {{ form.Position or "-" }}
+                        </div>
+
+                    </td>
+
+
+                    <td>
+
+                        <strong>
+                            {{ form.Code }}
+                        </strong>
+
+                        <div class="table-subtext">
+                            {{ form.Brand }}
+                            {{ form.Model }}
+                        </div>
+
+                    </td>
+
+
+                    <td>
+                        {{ form.SerialNumber }}
+                    </td>
+
+
+                    <td>
+                        {{ form.GenerationDate }}
+                    </td>
+
+
+                    <td>
+
+                        <span
+                            class="form-status form-status-{{ form.Status|lower }}"
+                        >
+                            {{ form.Status }}
+                        </span>
+
+                    </td>
+
+
+                    <td class="responsibility-actions-cell">
+
+                        <div class="responsibility-actions">
+
+                            <a
+                                href="/responsibility-forms/{{ form.AcknowledgementID }}/download"
+                                class="view-button"
+                            >
+                                PDF
+                            </a>
+
+
+                            <form
+                                method="POST"
+                                action="/responsibility-forms/{{ form.AcknowledgementID }}/status"
+                            >
+
+                                <select
+                                    name="status"
+                                    class="status-select"
+                                    onchange="this.form.submit()"
+                                >
+
+                                    <option
+                                        value="Generated"
+                                        {% if form.Status == "Generated" %}
+                                            selected
+                                        {% endif %}
+                                    >
+                                        Generated
+                                    </option>
+
+
+                                    <option
+                                        value="Signed"
+                                        {% if form.Status == "Signed" %}
+                                            selected
+                                        {% endif %}
+                                    >
+                                        Signed
+                                    </option>
+
+
+                                    <option
+                                        value="Cancelled"
+                                        {% if form.Status == "Cancelled" %}
+                                            selected
+                                        {% endif %}
+                                    >
+                                        Cancelled
+                                    </option>
+
+                                </select>
+
+                            </form>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            {% else %}
+
+                <tr>
+
+                    <td
+                        colspan="7"
+                        class="empty-row"
+                    >
+                        No responsibility forms found.
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+{% endblock %}

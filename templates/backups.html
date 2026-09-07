@@ -1,0 +1,224 @@
+{% extends "base.html" %}
+
+{% block title %}
+Backups | AssetFlow TI
+{% endblock %}
+
+{% block content %}
+
+<header class="page-header">
+
+    <div>
+        <h2>Backups</h2>
+        <p>Local database backup management</p>
+    </div>
+
+    <form
+        method="POST"
+        action="/backups/create"
+    >
+        <button
+            type="submit"
+            class="primary-button backup-create-button"
+        >
+            + Create Backup
+        </button>
+    </form>
+
+</header>
+
+
+<section class="backup-summary-grid">
+
+    <article class="backup-summary-card">
+
+        <span>Stored Backups</span>
+
+        <strong>
+            {{ backups|length }}
+        </strong>
+
+        <small>
+            Maximum retention: 30
+        </small>
+
+    </article>
+
+
+    <article class="backup-summary-card">
+
+        <span>Database</span>
+
+        <strong class="backup-database-name">
+            DB_AssetFlow_TI.db
+        </strong>
+
+        <small>
+            SQLite local database
+        </small>
+
+    </article>
+
+
+    <article class="backup-summary-card">
+
+        <span>Protection</span>
+
+        <strong class="backup-protection-status">
+            Active
+        </strong>
+
+        <small>
+            Daily automatic backup
+        </small>
+
+    </article>
+
+</section>
+
+
+<section class="panel backup-panel">
+
+    <div class="panel-header backup-panel-header">
+
+        <div>
+            <h3>Database Backups</h3>
+            <p>Local recovery copies of AssetFlow TI</p>
+        </div>
+
+        <span class="backup-count">
+
+            {{ backups|length }}
+
+            {% if backups|length == 1 %}
+                backup
+            {% else %}
+                backups
+            {% endif %}
+
+        </span>
+
+    </div>
+
+
+    <div class="table-container">
+
+        <table class="backup-table">
+
+            <thead>
+                <tr>
+                    <th>Backup File</th>
+                    <th>Created</th>
+                    <th>Size</th>
+                    <th class="actions-header">
+                        Actions
+                    </th>
+                </tr>
+            </thead>
+
+
+            <tbody>
+
+            {% for backup in backups %}
+
+                <tr>
+
+                    <td>
+
+                        <div class="backup-file">
+
+                            <div class="backup-file-icon">
+                                DB
+                            </div>
+
+                            <div>
+
+                                <strong>
+                                    {{ backup.filename }}
+                                </strong>
+
+                                <span>
+                                    SQLite Database Backup
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </td>
+
+
+                    <td>
+                        <span class="backup-date">
+                            {{ backup.created }}
+                        </span>
+                    </td>
+
+
+                    <td>
+                        <span class="backup-size">
+                            {{ backup.size }}
+                        </span>
+                    </td>
+
+
+                    <td class="actions-cell">
+
+                        <a
+                            href="/backups/{{ backup.filename }}/download"
+                            class="backup-download-button"
+                        >
+                            Download
+                        </a>
+
+                    </td>
+
+                </tr>
+
+            {% else %}
+
+                <tr>
+
+                    <td
+                        colspan="4"
+                        class="empty-row"
+                    >
+                        No backups found.
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+
+<section class="backup-notice">
+
+    <div class="backup-notice-icon">
+        !
+    </div>
+
+    <div>
+
+        <strong>
+            External backup recommended
+        </strong>
+
+        <p>
+            These copies are stored on the same computer.
+            Periodically save an authorized backup on another
+            storage device to protect against hardware failure.
+        </p>
+
+    </div>
+
+</section>
+
+{% endblock %}
